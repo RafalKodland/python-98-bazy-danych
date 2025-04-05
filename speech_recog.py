@@ -11,5 +11,3 @@ def speech():
         audio = recog.listen(audio_file)
         print("Transkrypcja...")
         return recog.recognize_google(audio, language="pl-PL")
-
-print(speech())
