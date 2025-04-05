@@ -103,10 +103,13 @@ def create():
 @app.route('/form_create', methods=['GET','POST'])
 def form_create():
     if request.method == 'POST':
+        title =  request.form['title']
+        subtitle =  request.form['subtitle']
+        text =  request.form['text']
+
         if request.form['action'] == 'create':
-            title =  request.form['title']
-            subtitle =  request.form['subtitle']
-            text =  request.form['text']
+            if title == "" or subtitle == "" or text == "":
+                return render_template('create_card.html', error="Wszystkie pola muszą być uzupełnione!", title=title, subtitle=subtitle, text=text)
 
             # Tworzenie obiektu, który zostanie wysłany do bazy danych
             card = Card(title=title, subtitle=subtitle, text=text)
@@ -115,8 +118,11 @@ def form_create():
             db.session.commit()
             return redirect('/index')
         else:
-            recording = speech()
-            return render_template('create_card.html', text=recording)
+            try:
+                recording = speech()
+                return render_template('create_card.html', title=title, subtitle=subtitle, text=text + " " + recording)
+            except:
+                return render_template('create_card.html', error="Wystąpił błąd podczas nagrywania", title=title, subtitle=subtitle, text=text)
     else:
         return render_template('create_card.html')
 
