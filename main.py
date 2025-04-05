@@ -116,8 +116,5 @@ def form_create():
         return render_template('create_card.html')
 
 
-
-
-
 if __name__ == "__main__":
     app.run(debug=True)
